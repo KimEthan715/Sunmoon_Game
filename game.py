@@ -1,3 +1,4 @@
+
 import pygame
 import random
 #기본 크기,프레임 블록크기 설정
@@ -5,6 +6,15 @@ WIDTH=400
 HEIGHT=800
 FPS=50
 BLOCK_SIZE=8
+
+#박스관련
+Lthickness=1 #추가
+Bwidth=200
+Bheight=200
+boxU= HEIGHT//2-Bheight//2
+boxD= HEIGHT//2+Bheight//2
+boxR= WIDTH//2+Bwidth//2
+boxL= WIDTH//2-Bwidth//2
 
 INIT_POS=(WIDTH//2,HEIGHT-30)
 #색깔
@@ -47,8 +57,8 @@ class Bullet(pygame.sprite.Sprite):
         #입력
         self.rect.x = centerx
         self.rect.y = centery - 2
-        
-       
+
+
     def update(self):
         self.rect.y-=4
         if self.rect.y<0 : 
@@ -62,34 +72,34 @@ class Player(pygame.sprite.Sprite):
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH//2
-        self.rect.y = HEIGHT-30
-        
+        self.rect.y = HEIGHT//2
+
         #마지막으로 사격한 시간과 딜레이를 계산합니다.
         self.last_shoot=0
         self.shoot_delay=200
         #생명
         self.life = 3
-        
+
     def update(self):
         now = pygame.time.get_ticks()
         #키를 입력받고 움직임,사격
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            self.rect.x -= 3
-            if self.rect.x<=0 :
-                self.rect.x=0
+            self.rect.x -= 2
+            if self.rect.x<=boxL-Lthickness :
+                self.rect.x=boxL
         if keys[pygame.K_RIGHT]:
-            self.rect.x += 3
-            if self.rect.x >=WIDTH-4:
-                self.rect.x=WIDTH-4
+            self.rect.x += 2
+            if self.rect.x >=boxR+Lthickness-4:
+                self.rect.x=boxR-4
         if keys[pygame.K_UP]:
-            self.rect.y -= 3
-            if self.rect.y<=HEIGHT//2:
-                self.rect.y=HEIGHT//2
+            self.rect.y -= 2
+            if self.rect.y<=boxU-Lthickness:
+                self.rect.y=boxU
         if keys[pygame.K_DOWN]:
-            self.rect.y += 3
-            if self.rect.y >=HEIGHT-8:
-                self.rect.y = HEIGHT-8  
+            self.rect.y += 2
+            if self.rect.y >=boxD+Lthickness-8:
+                self.rect.y = boxD-8  
         if keys[pygame.K_SPACE]:
             if now-self.last_shoot >= self.shoot_delay:
                 self.last_shoot=now
@@ -128,7 +138,7 @@ class Enemy_bullet(pygame.sprite.Sprite):
 class BulletT1(Enemy_bullet):
     def __init__(self,centerx,centery,y,x):
         super().__init__(centerx,centery,y,x)
-      
+
     def update(self):
         super().update()
 #총알 2
@@ -174,14 +184,14 @@ class Enemy(pygame.sprite.Sprite):
         if now-temp>=2000 :
             temp=0
             self.rect.x+= self.speed*-1
-            
+
 #모든 적군은 enemy 클래스를 상속받습니다.
 class EnemyT1(Enemy):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface([BLOCK_SIZE*2, BLOCK_SIZE])
         self.image.fill(RED)
- 
+
         #마지막으로 쏜 시간, 딜레이
         #총알 클래스
         #목숨
@@ -209,7 +219,7 @@ class EnemyT2(Enemy):
         super().__init__()
         self.image = pygame.Surface([BLOCK_SIZE*1.5, BLOCK_SIZE*1.5])
         self.image.fill(BLUE)
-    
+
         self.last_shoot=0
         self.shoot_delay=400
         self.bullet_class=BulletT2
@@ -233,7 +243,7 @@ class EnemyT3(Enemy):
         super().__init__()
         self.image = pygame.Surface([BLOCK_SIZE*1.5, BLOCK_SIZE*1.5])
         self.image.fill(YELLOW)
-  
+
         self.last_shoot=0
         self.shoot_delay=500
         self.bullet_class=BulletT3
@@ -270,7 +280,8 @@ def game_loop():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        screen.fill(BLACK)    
+        screen.fill(BLACK)
+        pygame.draw.rect(screen, WHITE, [boxL-1, boxU-1, Bwidth + Lthickness*2, Bheight + Lthickness*2], Lthickness)  
         #모든 스프라이트들을 업데이트하고 그립니다
         all_sprites.update()
         all_sprites.draw(screen)
