@@ -33,7 +33,12 @@ score=0
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("1952 GAME score: "+ str(score))
 clock=pygame.time.Clock()
-
+hp_1 = pygame.image.load("image/heart_1.png")
+hp_1 = pygame.transform.scale(hp_1, (30,30))
+hp_2 = pygame.image.load("image/heart_1.png")
+hp_2 = pygame.transform.scale(hp_1, (30,30))
+hp_3 = pygame.image.load("image/heart_1.png")
+hp_3 = pygame.transform.scale(hp_1, (30,30))
 #스프라이트 그룹
 all_sprites=pygame.sprite.Group()
 player_bullet=pygame.sprite.Group()
@@ -281,7 +286,10 @@ def game_loop():
                 pygame.quit()
                 quit()
         screen.fill(BLACK)
-        pygame.draw.rect(screen, WHITE, [boxL-1, boxU-1, Bwidth + Lthickness*2, Bheight + Lthickness*2], Lthickness)  
+        pygame.draw.rect(screen, WHITE, [boxL-1, boxU-1, Bwidth + Lthickness*2, Bheight + Lthickness*2], Lthickness)
+        screen.blit(hp_1, (5,10))
+        screen.blit(hp_2, (25,10))  
+        screen.blit(hp_3, (45,10))  
         #모든 스프라이트들을 업데이트하고 그립니다
         all_sprites.update()
         all_sprites.draw(screen)
