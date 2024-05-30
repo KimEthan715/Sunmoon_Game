@@ -116,6 +116,13 @@ class Player(pygame.sprite.Sprite):
             self.life -= 1
             if self.life == 0 :
                 pygame.quit()
+    def draw_life(self):
+        if self.life >= 1:
+            screen.blit(hp_1, (5, 10))
+        if self.life >= 2:
+            screen.blit(hp_2, (35, 10))
+        if self.life == 3:
+            screen.blit(hp_3, (65, 10))
 #적군의 총알 클래스
 class Enemy_bullet(pygame.sprite.Sprite):
     #적군의 총알은 기본적으로 발사한 적군의 위치에서 생성되어야 합니다.
@@ -267,34 +274,30 @@ class EnemyT3(Enemy):
                 score+=3
                 self.kill()
 def game_loop():
-    player=Player()
+    player = Player()
     temp = 0
 
     while True:
         now = pygame.time.get_ticks()
-        #enemy를 자동으로 생성합니다.
-        if now-temp >= 300 and now-temp <=310 and len(enemy_sprites.sprites())<=10:
+        if now - temp >= 300 and now - temp <= 310 and len(enemy_sprites.sprites()) <= 10:
             EnemyT1()
-        if now-temp >= 600 and now-temp <=610 and len(enemy_sprites.sprites())<=10:
+        if now - temp >= 600 and now - temp <= 610 and len(enemy_sprites.sprites()) <= 10:
             EnemyT2()
-        if now-temp >= 700 and now-temp <=720 and len(enemy_sprites.sprites())<=10:
+        if now - temp >= 700 and now - temp <= 720 and len(enemy_sprites.sprites()) <= 10:
             EnemyT3()
-        if now-temp>=1200 :
-            temp=now
+        if now - temp >= 1200:
+            temp = now
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
         screen.fill(BLACK)
-        pygame.draw.rect(screen, WHITE, [boxL-1, boxU-1, Bwidth + Lthickness*2, Bheight + Lthickness*2], Lthickness)
-        screen.blit(hp_1, (5,10))
-        screen.blit(hp_2, (25,10))  
-        screen.blit(hp_3, (45,10))  
-        #모든 스프라이트들을 업데이트하고 그립니다
+        pygame.draw.rect(screen, WHITE, [boxL - 1, boxU - 1, Bwidth + Lthickness * 2, Bheight + Lthickness * 2], Lthickness)
+        player.draw_life()  # 생명 표시
         all_sprites.update()
         all_sprites.draw(screen)
         pygame.display.flip()
-        #캡션에 점수를 보여줍니다
-        pygame.display.set_caption("1952 GAME score: "+ str(score))
+        pygame.display.set_caption("1952 GAME score: " + str(score))
         clock.tick(FPS)
+
 game_loop()
