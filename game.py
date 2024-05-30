@@ -39,6 +39,7 @@ hp_2 = pygame.image.load("image/heart_1.png")
 hp_2 = pygame.transform.scale(hp_1, (30,30))
 hp_3 = pygame.image.load("image/heart_1.png")
 hp_3 = pygame.transform.scale(hp_1, (30,30))
+font_test = pygame.font.SysFont(None, 30)
 #스프라이트 그룹
 all_sprites=pygame.sprite.Group()
 player_bullet=pygame.sprite.Group()
@@ -294,10 +295,12 @@ def game_loop():
         screen.fill(BLACK)
         pygame.draw.rect(screen, WHITE, [boxL - 1, boxU - 1, Bwidth + Lthickness * 2, Bheight + Lthickness * 2], Lthickness)
         player.draw_life()  # 생명 표시
+        text = font_test.render("score:"+str(score),True,(255,255,255))
+        screen.blit(text, (305,10))
         all_sprites.update()
         all_sprites.draw(screen)
         pygame.display.flip()
-        pygame.display.set_caption("1952 GAME score: " + str(score))
+        pygame.display.set_caption("1952 GAME")
         clock.tick(FPS)
 
 game_loop()
